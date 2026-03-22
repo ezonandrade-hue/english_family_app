@@ -6,7 +6,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
 
-const String baseUrl = 'http://127.0.0.1:8000';
+const String baseUrl = 'http://192.168.80.248:8000';
 
 void main() => runApp(const MyApp());
 
