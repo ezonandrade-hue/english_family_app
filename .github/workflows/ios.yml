@@ -16,9 +16,9 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.22.2
+          flutter-version: 3.19.6
 
-      - name: Flutter doctor (debug)
+      - name: Flutter doctor
         run: flutter doctor -v
 
       - name: Install dependencies
@@ -27,19 +27,25 @@ jobs:
       - name: Clean build
         run: flutter clean
 
-      - name: Build IPA (no signing)
-        run: flutter build ipa --release --no-codesign
+      # 🔥 BUILD SEM SIGNING (FUNCIONA SEM MAC)
+      - name: Build iOS (no signing)
+        run: flutter build ios --release --no-codesign
 
-      # 🔥 DEBUG CRÍTICO (NÃO REMOVE)
-      - name: List build files
+      # 🔥 CRIAR IPA MANUAL (SEM XCODE SIGNING)
+      - name: Create IPA
         run: |
-          echo "=== IPA FOLDER ==="
-          ls -R build/ios/ipa || true
+          mkdir Payload
+          cp -r build/ios/iphoneos/Runner.app Payload/
+          zip -r app.ipa Payload
 
-      # 🔥 UPLOAD SEGURO
+      # 🔥 DEBUG
+      - name: List files
+        run: ls -R
+
+      # 🔥 UPLOAD
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
           name: ios-app
-          path: build/ios/ipa/*.ipa
+          path: app.ipa
           if-no-files-found: error
