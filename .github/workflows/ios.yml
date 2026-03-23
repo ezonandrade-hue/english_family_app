@@ -27,22 +27,22 @@ jobs:
       - name: Clean build
         run: flutter clean
 
-      # 🔥 BUILD SEM SIGNING (FUNCIONA SEM MAC)
-      - name: Build iOS (no signing)
-        run: flutter build ios --release --no-codesign
+      # 🔥 BUILD PARA SIMULADOR (SEM SIGNING)
+      - name: Build iOS (simulator)
+        run: flutter build ios --simulator --release
 
-      # 🔥 CRIAR IPA MANUAL (SEM XCODE SIGNING)
+      # 🔥 CRIA IPA MANUAL
       - name: Create IPA
         run: |
           mkdir Payload
-          cp -r build/ios/iphoneos/Runner.app Payload/
+          cp -r build/ios/iphonesimulator/Runner.app Payload/
           zip -r app.ipa Payload
 
-      # 🔥 DEBUG
+      # 🔍 DEBUG
       - name: List files
         run: ls -R
 
-      # 🔥 UPLOAD
+      # 📦 UPLOAD
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
