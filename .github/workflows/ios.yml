@@ -39,13 +39,15 @@ jobs:
           pod install
           cd ..
 
-      # 🔥 Build iOS (simulador, sem assinatura)
-      - name: Build iOS (simulator)
-        run: flutter build ios --simulator
+      - name: Build iOS (no codesign clean)
+  	run: |
+    	  flutter clean
+    	  flutter pub get
+    	  flutter build ios --no-codesign
 
       # 📦 Artefato
       - name: Upload build
         uses: actions/upload-artifact@v4
         with:
           name: ios-build
-          path: build/ios/iphonesimulator
+          path: build/ios/iphoneos
