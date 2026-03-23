@@ -29,7 +29,7 @@ jobs:
 
       # 🔥 BUILD PARA SIMULADOR (SEM SIGNING)
       - name: Build iOS (simulator)
-        run: flutter build ios --simulator --release
+        run: flutter build ios --simulator 
 
       # 🔥 CRIA IPA MANUAL
       - name: Create IPA
