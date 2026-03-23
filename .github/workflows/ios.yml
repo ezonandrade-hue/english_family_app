@@ -1,0 +1,45 @@
+name: iOS Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: stable
+
+      - name: Flutter doctor (debug)
+        run: flutter doctor -v
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Clean build
+        run: flutter clean
+
+      - name: Build IPA (no signing)
+        run: flutter build ipa --release --no-codesign
+
+      # 🔥 DEBUG CRÍTICO (NÃO REMOVE)
+      - name: List build files
+        run: |
+          echo "=== IPA FOLDER ==="
+          ls -R build/ios/ipa || true
+
+      # 🔥 UPLOAD SEGURO
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-app
+          path: build/ios/ipa/*.ipa
+          if-no-files-found: error
