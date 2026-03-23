@@ -41,9 +41,9 @@ jobs:
 
       - name: Build iOS (no codesign clean)
   	run: |
-    	  flutter clean
-    	  flutter pub get
-    	  flutter build ios --no-codesign
+          flutter clean
+          flutter pub get
+          flutter build ios --no-codesign
 
       # 📦 Artefato
       - name: Upload build
