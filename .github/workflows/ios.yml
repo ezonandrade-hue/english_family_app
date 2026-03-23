@@ -1,4 +1,4 @@
-name: iOS Build
+name: Build iOS Flutter
 
 on:
   push:
@@ -13,39 +13,39 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # 🔥 Flutter correto
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.22.2
+          flutter-version: 3.22.0
 
-      - name: Flutter doctor
-        run: flutter doctor -v
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Clean build
+      # 🔥 Limpeza total
+      - name: Flutter clean
         run: flutter clean
 
-      # 🔥 BUILD PARA SIMULADOR (SEM SIGNING)
-      - name: Build iOS (simulator)
-        run: flutter build ios --simulator 
+      # 🔥 Dependências
+      - name: Get dependencies
+        run: flutter pub get
 
-      # 🔥 CRIA IPA MANUAL
-      - name: Create IPA
+      # 🔥 Corrige pods quebrados
+      - name: Reset CocoaPods
         run: |
-          mkdir Payload
-          cp -r build/ios/iphonesimulator/Runner.app Payload/
-          zip -r app.ipa Payload
+          rm -rf ios/Pods
+          rm -rf ios/Podfile.lock
 
-      # 🔍 DEBUG
-      - name: List files
-        run: ls -R
+      - name: Install Pods
+        run: |
+          cd ios
+          pod install
+          cd ..
 
-      # 📦 UPLOAD
-      - name: Upload IPA
+      # 🔥 Build iOS (simulador, sem assinatura)
+      - name: Build iOS (simulator)
+        run: flutter build ios --simulator
+
+      # 📦 Artefato
+      - name: Upload build
         uses: actions/upload-artifact@v4
         with:
-          name: ios-app
-          path: app.ipa
-          if-no-files-found: error
+          name: ios-build
+          path: build/ios/iphonesimulator
