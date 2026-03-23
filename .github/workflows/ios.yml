@@ -40,7 +40,7 @@ jobs:
           cd ..
 
       - name: Build iOS (no codesign clean)
-  	run: |
+        run: |
           flutter clean
           flutter pub get
           flutter build ios --no-codesign
